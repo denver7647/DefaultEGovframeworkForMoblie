@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app id="WebApp_ID" version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
+    <display-name>egovframework mobile</display-name>
+    <filter>
+        <filter-name>encodingFilter</filter-name>
+        <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+        <init-param>
+            <param-name>encoding</param-name>
+            <param-value>utf-8</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>encodingFilter</filter-name>
+        <url-pattern>*.mdo</url-pattern>
+    </filter-mapping>
+
+	<!--
+	Tomcat?˜ ê²½ìš° allowCasualMultipartParsing="true" ì¶”ê?
+	<Context docBase="" path="/" reloadable="true" allowCasualMultipartParsing="true">
+	-->
+	<filter>
+		<display-name>springMultipartFilter</display-name>
+		<filter-name>springMultipartFilter</filter-name>
+		<filter-class>org.springframework.web.multipart.support.MultipartFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>springMultipartFilter</filter-name>
+		<url-pattern>*.mdo</url-pattern>
+	</filter-mapping>
+
+    <!--
+    HTMLTagFilter?˜ ê²½ìš°?Š” ?ŒŒ?¼ë¯¸í„°?— ???•˜?—¬ XSS ?˜¤ë¥? ë°©ì?ë¥? ?œ„?•œ ë³??™˜?„ ì²˜ë¦¬?•©?‹ˆ?‹¤.
+    XSS ë³´ì•ˆ ?œ„?—˜ ë°©ì?ë¥? ?œ„?•˜?—¬ ë°˜ë“œ?‹œ ?„¤? • ?•˜?…”?•¼ ?•©?‹ˆ?‹¤.
+    (<c:out />?˜ ê²½ìš° ?•´?‹¹ ë·°ë‹¨?˜ ?‚¬?š©?•œ ê³³ì— ?•œ? •?•˜?—¬ ?°?´?„° ì¶œë ¥?‹œ XSS ë°©ì? ì²˜ë¦¬ê°? ?¨)
+    -->
+    <filter>
+        <filter-name>HTMLTagFilter</filter-name>
+        <filter-class>egovframework.com.cmm.filter.HTMLTagFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>HTMLTagFilter</filter-name>
+        <url-pattern>*.mdo</url-pattern>
+    </filter-mapping>
+
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>classpath*:egovframework/spring/**/context-*.xml</param-value>
+    </context-param>
+
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+
+    <servlet>
+        <servlet-name>action</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <init-param>
+            <param-name>contextConfigLocation</param-name>
+            <param-value>/WEB-INF/config/egovframework/springmvc/*-servlet.xml</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>action</servlet-name>
+        <url-pattern>*.mdo</url-pattern>
+    </servlet-mapping>
+
+   	<!-- ëª¨ë°”?¼ ?‹ ê·œê³µ?†µì»´í¬?„Œ?Š¸ -->
+	<mime-mapping>
+		<extension>manifest</extension>
+		<mime-type>text/cache-manifest</mime-type>
+	</mime-mapping>
+	<!-- ëª¨ë°”?¼ ?‹ ê·œê³µ?†µì»´í¬?„Œ?Š¸ ? -->
+
+    <welcome-file-list>
+        <welcome-file>index.jsp</welcome-file>
+    </welcome-file-list>
+    <login-config>
+        <auth-method>BASIC</auth-method>
+    </login-config>
+
+    <session-config>
+        <session-timeout>600</session-timeout>
+    </session-config>
+
+    <error-page>
+      <error-code>404</error-code>
+      <location>/mcode404.jsp</location>
+    </error-page>
+    <error-page>
+      <error-code>500</error-code>
+      <location>/mcode500.jsp</location>
+    </error-page>
+
+</web-app>
